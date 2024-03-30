@@ -80,7 +80,21 @@ function rHtmlConverter(
                     </svg>`
     }
 
-    
+    /**
+     * SVG 를 Image 로 변환한다.
+     * @param {*} svg (String)
+     */
+    function convertSvgToImg(svg) {
+        return new Promise((resolve, reject) => {
+            const img = new Image()
+            img.onload = function() {
+                resolve(img)
+            }
+            img.src = 'data:xml+svg;charset=utf-8,' + svg
+        })
+    }
+
+
 }
 
 
