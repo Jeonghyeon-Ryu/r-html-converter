@@ -1,3 +1,1 @@
-import { rHtmlValidator } from "../lib/r-html-validator.js";
-
-console.log(rHtmlValidator)
+import { rHtmlValidator, Stack } from "../lib/r-html-validator.js";
