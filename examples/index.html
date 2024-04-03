@@ -6,11 +6,19 @@
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script type="module" src="./test.js"></script>
+    <script type="module">
+      import {rHtmlValidator} from "./test.js";
+
+      let tagHtml = document.querySelector("#test").outerHTML;
+
+      rHtmlValidator(tagHtml);
+
+    </script>
   </head>
   <body>
-    <div>
-      <div>
-        <h1>sd sd</h1>
+    <div id="test">
+      <h1><div>
+        sd sd</h1>
       </div>
     </div>
   </body>
