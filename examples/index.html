@@ -6,19 +6,25 @@
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script type="module" src="./test.js"></script>
-    <script type="module">
-      import {rHtmlValidator} from "./test.js";
-
-      let tagHtml = document.querySelector("#test").outerHTML;
-
-      rHtmlValidator(tagHtml);
-
-    </script>
+    <link rel="stylesheet" href="./test.css">
   </head>
   <body>
-    <div id="test">
-      <h1><div>
-        sd sd</h1>
+    <div class="container">
+      <div class="header">
+        <button id="header-btn1">버튼1</button>
+        <button id="header-btn2">버튼2</button>
+        <button id="header-btn3">버튼3</button>
+      </div>
+      <div class="article">
+        테스트
+        <input type="text">
+        <input type="text">
+        <lable>라벨 : <input type="text"></lable>
+        <hr>
+        <hr>
+      </div>
+      <div class="footer">
+        FOOTER
       </div>
     </div>
   </body>
