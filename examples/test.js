@@ -28,9 +28,10 @@ function btnHandler1(e) {
     console.log('Btn 1 Click')
     const container = document.querySelector('.container')
     const option = {
-        isTest: true
+        isTest: false
     }
-    rHtmlConverter(container, 'png', option)
+    // rHtmlConverter(container, 'png', option)
+    console.log(rHtmlConverter.toImg(container,'png',option))
 }
 function btnHandler2(e) {
     console.log('Btn 2 Click')

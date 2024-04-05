@@ -13,15 +13,10 @@
 ***********************************************************************************/
 import { rHtmlValidator } from "./lib/r-html-validator.js"
 
-function rHtmlConverter(
-    el,
-    type = 'png',
-    option
-){
+const rHtmlConverter = (function(){
     /*************************************************** */
     // 변수 및 생성자
     /*************************************************** */
-    const isTest = option?.isTest??false  // 테스트 유무 (테스트 시 테스트코드로 진행)
     let htmlValidator = null
 
     /*************************************************** */
@@ -33,12 +28,12 @@ function rHtmlConverter(
     /*************************************************** */
     // 초기화
     /*************************************************** */
-    function init() {
-        console.log(htmlValidation)
+    function init(element, type, options) {
+        const isTest = options?.isTest??false  // 테스트 유무 (테스트 시 테스트코드로 진행)
         if(isTest) {
-            htmlValidator = () => rHtmlValidator(el)
+            htmlValidator = () => rHtmlValidator(element)
         } else {
-            htmlValidator = () => htmlValidation(el)
+            htmlValidator = () => htmlValidation(element)
         }
     }
 
@@ -233,10 +228,19 @@ function rHtmlConverter(
         linkTest.click()
     }
 
-    // 테스트코드
-    init()
-    htmlToImg(el)
-    ///////////////
-}
+    
+    return {
+        /**
+         * 
+         * @param {*} element 
+         * @param {*} type 
+         * @param {*} options 
+         */
+        toImg : function(element, type, options) {
+            init(element, type, options)
+            htmlToImg(element)
+        }
+    }
+})();
 
 export { rHtmlConverter }
