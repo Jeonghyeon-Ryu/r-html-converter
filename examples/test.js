@@ -26,6 +26,11 @@ for(let [idx, btn] of btns.entries()) {
 // 테스트 버튼 이벤트 핸들러 ( 함수 수정하여 테스트 진행 )
 function btnHandler1(e) {
     console.log('Btn 1 Click')
+    const container = document.querySelector('.container')
+    const option = {
+        isTest: true
+    }
+    rHtmlConverter(container, 'png', option)
 }
 function btnHandler2(e) {
     console.log('Btn 2 Click')

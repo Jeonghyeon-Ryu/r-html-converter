@@ -11,16 +11,18 @@
 *
 *------------------------------------------------------------------
 ***********************************************************************************/
+import { rHtmlValidator } from "./lib/r-html-validator.js"
+
 function rHtmlConverter(
     el,
-    type = 'png'
+    type = 'png',
+    option
 ){
-    console.log(el, type)
     /*************************************************** */
     // 변수 및 생성자
     /*************************************************** */
-
-
+    const isTest = option?.isTest??false  // 테스트 유무 (테스트 시 테스트코드로 진행)
+    let htmlValidator = null
 
     /*************************************************** */
     // Getter Setter
@@ -31,7 +33,14 @@ function rHtmlConverter(
     /*************************************************** */
     // 초기화
     /*************************************************** */
-
+    function init() {
+        console.log(htmlValidation)
+        if(isTest) {
+            htmlValidator = () => rHtmlValidator(el)
+        } else {
+            htmlValidator = () => htmlValidation(el)
+        }
+    }
 
 
     /*************************************************** */
@@ -121,7 +130,7 @@ function rHtmlConverter(
                                 </style>
                             </defs>
                             <div xmlns="http://www.w3.org/1999/xhtml">
-                                ${validationHtml(element)}
+                                ${htmlValidator(element)}
                             </div>
                         </foreignObject>
                     </svg>`
@@ -131,24 +140,8 @@ function rHtmlConverter(
 
     /******************************************************
      * 태그 유효성 검사
-     */
-    function checkTag(element) {
-        let idx = 0
-        while(true) {
-            idx = ele.indexOf("<input", idx)<ele.indexOf("<img", idx)?ele.indexOf("<input", idx):ele.indexOf("<img", idx)
-            if(idx==-1){
-                break;
-            }
-            let notCloseIdx = ele.indexOf(">", idx)
-            idx = notCloseIdx
-            if(ele[notCloseIdx-1]=="/"){
-                continue;
-            }
-            ele = ele.slice(0,notCloseIdx) + "/" + ele.slice(notCloseIdx, ele.length+1)
-        }
-    }
-
-    function validationHtml(elements='') {
+     ******************************************************/
+    function htmlValidation(elements='') {
         const SELF_CLOSE_TAG = ['area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr']
 
         let tagStack = []
@@ -241,7 +234,8 @@ function rHtmlConverter(
     }
 
     // 테스트코드
-    htmlToImg(data)
+    init()
+    htmlToImg(el)
     ///////////////
 }
 
