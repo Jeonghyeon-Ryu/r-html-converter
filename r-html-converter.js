@@ -134,7 +134,7 @@ const rHtmlConverter = (function(){
 
 
     /******************************************************
-     * 태그 유효성 검사
+     * 태그 유효성 검사 ( 테스트 코드 )
      ******************************************************/
     function htmlValidation(elements='') {
         const SELF_CLOSE_TAG = ['area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr']
@@ -143,9 +143,16 @@ const rHtmlConverter = (function(){
         let ele = elements.outerHTML
         let idx = 0 
         while(true) {
-            let openIdx = ele.indexOf("<",idx)  //0
-            let closeIdx1 = ele.indexOf("</",idx)   //216
-            let closeIdx2 = ele.indexOf("/>",idx)   //-1
+            // 열기 태그 인식
+            let openIdx = ele.indexOf("<",idx)
+            if(ele.substring(openIdx,openIdx+4) === '<!--') {
+                // 주석 패스
+                idx = ele.indexOf('-->', openIdx) + 4
+                continue;
+            }
+            // 닫기 태그 인식 ( 2가지 종류 )
+            let closeIdx1 = ele.indexOf("</",idx)
+            let closeIdx2 = ele.indexOf("/>",idx)
             let closeIdx = 0
             let closeTag = ''
             if((openIdx==-1 && closeIdx1==-1 && closeIdx2==-1) || idx==ele.length) {
@@ -167,6 +174,10 @@ const rHtmlConverter = (function(){
                 closeTag = '/>'
             }
 
+            // 가장 최근의 태그를 인식
+            // 열기 일 경우 > Push
+            // 닫기 일 경우 > Pop > Pop 열기태그와 닫기태그 비교 > 같을경우 > closeTag 뒤로 idx 증가
+            //                                                > 다를경우 > '>'태그 찾아서 닫기 넣기 > pop > closeTag와 비교 > 같을때 까지 반복
             if(closeIdx<=openIdx) {
                 let openTag = tagStack.pop()
                 idx = closeIdx+1
@@ -214,13 +225,6 @@ const rHtmlConverter = (function(){
             console.log('************ IMG LOAD ERROR : ', e)
         }
 
-        
-        // 테스트 코드 
-        // const dataUrl = window.URL || window.webkitURL || window
-        // const svg = new Blob([data],{type:'image/svg+xml; charset=utf-8'})
-        // const url = dataUrl.createObjectURL(svg)
-        // console.log(url)
-        //////////////
         img.src = 'data:image/svg+xml;charset=utf-8,' + data
         const linkTest = document.createElement('a')
         linkTest.href= 'data:image/svg+xml;charset=utf-8,' + data
@@ -231,14 +235,22 @@ const rHtmlConverter = (function(){
     
     return {
         /**
-         * 
-         * @param {*} element 
-         * @param {*} type 
+         * Convert HTML to image
+         * @param {*} element HTML Element
+         * @param {*} type png | jpg | jpeg 
          * @param {*} options 
          */
         toImg : function(element, type, options) {
             init(element, type, options)
             htmlToImg(element)
+        },
+        /**
+         * Convert HTML to pdf
+         * @param {*} element 
+         * @param {*} options 
+         */
+        toPdf : function(element, options) {
+
         }
     }
 })();
