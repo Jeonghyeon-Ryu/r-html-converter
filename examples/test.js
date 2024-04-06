@@ -10,32 +10,27 @@ import { rHtmlConverter } from "../r-html-converter.js";
  */
 
 // 테스트 버튼 이벤트 핸들러 객체
-const btnHandlers = [
-    btnHandler1,
-    btnHandler2,
-    btnHandler3,
-]
-
+const btnHandlers = [btnHandler1, btnHandler2, btnHandler3];
 
 // 테스트 버튼 이벤트 처리
-const btns = document.querySelectorAll('.container .header button')
-for(let [idx, btn] of btns.entries()) {
-    btns[idx].onclick = btnHandlers[idx]
+const btns = document.querySelectorAll(".container .header button");
+for (let [idx, btn] of btns.entries()) {
+  btns[idx].onclick = btnHandlers[idx];
 }
 
 // 테스트 버튼 이벤트 핸들러 ( 함수 수정하여 테스트 진행 )
 function btnHandler1(e) {
-    console.log('Btn 1 Click')
-    const container = document.querySelector('.container')
-    const option = {
-        isTest: false
-    }
-    // rHtmlConverter(container, 'png', option)
-    console.log(rHtmlConverter.toImg(container,'png',option))
+  console.log("Btn 1 Click");
+  const container = document.querySelector(".container");
+  const option = {
+    isTest: true,
+  };
+  // rHtmlConverter(container, 'png', option)
+  console.log(rHtmlConverter.toImg(container, "png", option));
 }
 function btnHandler2(e) {
-    console.log('Btn 2 Click')
+  console.log("Btn 2 Click");
 }
 function btnHandler3(e) {
-    console.log('Btn 3 Click')
+  console.log("Btn 3 Click");
 }
