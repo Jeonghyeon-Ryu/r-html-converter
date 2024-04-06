@@ -31,9 +31,9 @@ const rHtmlConverter = (function(){
     function init(element, type, options) {
         const isTest = options?.isTest??false  // 테스트 유무 (테스트 시 테스트코드로 진행)
         if(isTest) {
-            htmlValidator = () => rHtmlValidator(element)
+            htmlValidator = (element) => rHtmlValidator(element)
         } else {
-            htmlValidator = () => htmlValidation(element)
+            htmlValidator = (element) => htmlValidation(element)
         }
     }
 
@@ -117,6 +117,7 @@ const rHtmlConverter = (function(){
      * @returns 
      */
     function genSvg(element) {
+        console.log(htmlValidator(element))
         const data = `<svg xmlns="http://www.w3.org/2000/svg" width="${getWidth(element)}" height="${getHeight(element)}">
                         <foreignObject width="100%" height="100%">
                             <defs>
