@@ -85,7 +85,7 @@ const rHtmlConverter = (function(){
         }
         let cssString = ''
         for(let property in css) {
-            cssString += property+':'+css[property]+';\n'
+            cssString += property+':'+css[property]+'; '
         }
         // css 반환 시 JSON 객체 형태로 반환 됨.
         return cssString;
@@ -102,8 +102,16 @@ const rHtmlConverter = (function(){
      */
     function extCssRecursive(element, parent='', nth=0) {
         let cssString = extCss(element)    // CSS Json String 
-        const tag = (parent==''? element.tagName : parent + ">" + element.tagName + ":nth-child(" + (+nth+1) + ")").toLowerCase()
-        cssString = tag + "{" + cssString + "}\n"
+        let tag = ''
+        if(element.getAttribute('id')) {
+            tag = '&#35;' + element.getAttribute('id')
+        } else if(element.getAttribute('class')) {
+            tag = '.' + element.classList[0]
+        } else {
+            tag = element.tagName + ":nth-child(" + (+nth+1) + ")"
+        }
+        tag = (parent==''? tag : parent + ">" + tag).toLowerCase()
+        cssString = tag + "{" + cssString + "\n}"
         for(let i=0; i<element.children.length; i++) {
             let childCss = extCssRecursive(element.children[i], tag, i)
             cssString += (childCss + '\n')
@@ -117,20 +125,17 @@ const rHtmlConverter = (function(){
      * @returns 
      */
     function genSvg(element) {
-        console.log(htmlValidator(element))
         const data = `<svg xmlns="http://www.w3.org/2000/svg" width="${getWidth(element)}" height="${getHeight(element)}">
+                        <style type="text/css">
+                            ${extCssRecursive(element)}
+                        </style>
                         <foreignObject width="100%" height="100%">
-                            <defs>
-                                <style type="text/css">
-                                    ${extCssRecursive(element)}
-                                </style>
-                            </defs>
                             <div xmlns="http://www.w3.org/1999/xhtml">
                                 ${htmlValidator(element)}
                             </div>
                         </foreignObject>
                     </svg>`
-        return data
+        return btoa(unescape(encodeURIComponent(data)))
     }
 
 
@@ -225,10 +230,11 @@ const rHtmlConverter = (function(){
         img.onerror = function(e) {
             console.log('************ IMG LOAD ERROR : ', e)
         }
-
-        img.src = 'data:image/svg+xml;charset=utf-8,' + data
+        // img.src = 'data:image/svg+xml;charset=utf-8,' + data
+        img.src = 'data:image/svg+xml;base64,' + data
         const linkTest = document.createElement('a')
-        linkTest.href= 'data:image/svg+xml;charset=utf-8,' + data
+        // linkTest.href= 'data:image/svg+xml;charset=utf-8,' + data
+        linkTest.href= 'data:image/svg+xml;base64,' + data
         linkTest.download = 'test'
         linkTest.click()
     }
