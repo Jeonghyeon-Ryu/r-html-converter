@@ -28,10 +28,10 @@ const rHtmlConverter = (function(){
     /*************************************************** */
     // 초기화
     /*************************************************** */
-    function init(element, type, options) {
+    async function init(element, type, options) {
         const isTest = options?.isTest??false  // 테스트 유무 (테스트 시 테스트코드로 진행)
-        if(isTest) {
-            htmlValidator = (element) => rHtmlValidator(element)
+        if (isTest) {
+            htmlValidator = async (element) =>  await rHtmlValidator(element);
         } else {
             htmlValidator = (element) => htmlValidation(element)
         }
@@ -72,7 +72,7 @@ const rHtmlConverter = (function(){
      * @param {*} element 
      * @returns 
      */
-     function extCss(element) {
+    function extCss(element) {
         let css = {}
         let style = window.getComputedStyle(element);
         for(let i=0; i<style.length; i++) {
@@ -124,14 +124,14 @@ const rHtmlConverter = (function(){
      * @param {*} element (HTMLElement)
      * @returns 
      */
-    function genSvg(element) {
+    async function genSvg(element) {
         const data = `<svg xmlns="http://www.w3.org/2000/svg" width="${getWidth(element)}" height="${getHeight(element)}">
                         <style type="text/css">
                             ${extCssRecursive(element)}
                         </style>
                         <foreignObject width="100%" height="100%">
                             <div xmlns="http://www.w3.org/1999/xhtml">
-                                ${htmlValidator(element)}
+                                ${await htmlValidator(element)}
                             </div>
                         </foreignObject>
                     </svg>`
@@ -209,9 +209,9 @@ const rHtmlConverter = (function(){
      * HTMLElement 를 이미지로 변환한다. ( 일단 다운로드 > 변경예정 )
      * @param {*} element (HTMLElement)
      */
-    function htmlToImg(element) {
+    async function htmlToImg(element) {
         // ELEMENT TO SVG
-        const data = genSvg(element)
+        const data = await genSvg(element)
         const img = new Image()
         img.onload = function () {
             const tmpCanvas = document.createElement('canvas')
@@ -247,9 +247,9 @@ const rHtmlConverter = (function(){
          * @param {*} type png | jpg | jpeg 
          * @param {*} options 
          */
-        toImg : function(element, type, options) {
-            init(element, type, options)
-            htmlToImg(element)
+        toImg : async function(element, type, options) {
+            await init(element, type, options)
+            await htmlToImg(element)
         },
         /**
          * Convert HTML to pdf
