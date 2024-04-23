@@ -28,10 +28,10 @@ const rHtmlConverter = (function(){
     /*************************************************** */
     // 초기화
     /*************************************************** */
-    async function init(element, type, options) {
+    function init(element, type, options) {
         const isTest = options?.isTest??false  // 테스트 유무 (테스트 시 테스트코드로 진행)
         if (isTest) {
-            htmlValidator = async (element) =>  await rHtmlValidator(element);
+            htmlValidator = (element) => rHtmlValidator(element);
         } else {
             htmlValidator = (element) => htmlValidation(element)
         }
@@ -247,9 +247,9 @@ const rHtmlConverter = (function(){
          * @param {*} type png | jpg | jpeg 
          * @param {*} options 
          */
-        toImg : async function(element, type, options) {
-            await init(element, type, options)
-            await htmlToImg(element)
+        toImg : function(element, type, options) {
+            init(element, type, options)
+            htmlToImg(element)
         },
         /**
          * Convert HTML to pdf
